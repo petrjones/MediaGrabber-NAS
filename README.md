@@ -50,6 +50,12 @@ Support: **jones.petr@gmail.com** · [Report an issue](https://github.com/petrjo
 
 The [Windows edition](https://github.com/petrjones/MediaGrabber) is a separate application with additional features. The NAS About window checks its latest stable version on GitHub and retains the last verified version if a later check fails.
 
+
+## Screenshots / Snímky aplikace
+
+<img width="2042" height="1211" alt="MediaGrabber NAS_4" src="https://github.com/user-attachments/assets/5d14b246-8bd6-4c29-9845-d98552a71dc0" />
+
+
 ---
 
 ## Česky

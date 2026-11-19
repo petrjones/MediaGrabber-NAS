@@ -1,0 +1,10 @@
+.env
+secrets/admin_password.txt
+data/
+downloads/
+__pycache__/
+*.pyc
+*.sqlite3*
+*.log
+SOURCE.tar.gz
+release-build/

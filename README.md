@@ -46,7 +46,7 @@ The developer has tested the application on **DS1817+ with DSM 7.3.1 Update 1**,
 
 MediaGrabber NAS is free of charge. Optional contributions do not unlock features or change functionality. Download availability depends on the source and yt-dlp. Use the application for content you own or have permission to download.
 
-Support: **jones.petr@gmail.com** · [Report an issue](https://github.com/petrjones/MediaGrabber-NAS/issues)
+· [Report an issue](https://github.com/petrjones/MediaGrabber-NAS/issues)
 
 The [Windows edition](https://github.com/petrjones/MediaGrabber) is a separate application with additional features. The NAS About window checks its latest stable version on GitHub and retains the last verified version if a later check fails.
 
@@ -102,6 +102,6 @@ Vývojář aplikaci vyzkoušel na **DS1817+ s DSM 7.3.1 Update 1**, včetně bet
 
 MediaGrabber NAS je zdarma. Dobrovolný příspěvek neodemyká žádné funkce ani nemění funkčnost. Dostupnost stahování závisí na zdroji a nástroji yt-dlp. Stahuj obsah, který vlastníš nebo k jehož stažení máš svolení.
 
-Podpora: **jones.petr@gmail.com** · [Nahlásit problém](https://github.com/petrjones/MediaGrabber-NAS/issues)
+· [Nahlásit problém](https://github.com/petrjones/MediaGrabber-NAS/issues)
 
 [Verze pro Windows](https://github.com/petrjones/MediaGrabber) je samostatná aplikace s dalšími funkcemi. Okno O aplikaci v NAS verzi ověřuje její aktuální stabilní vydání na GitHubu a při neúspěšné kontrole ponechá poslední ověřený údaj.

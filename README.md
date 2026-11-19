@@ -1,5 +1,7 @@
 # MediaGrabber NAS
 
+**Current beta / Aktuální beta: [0.1.0-beta.22](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22).**
+
 **Video and audio downloads, a persistent queue, and automatic YouTube monitoring for Synology NAS.**
 
 [Download and release notes](https://github.com/petrjones/MediaGrabber-NAS/releases) · [Česky](#česky) · [Windows edition](https://github.com/petrjones/MediaGrabber)
@@ -30,7 +32,7 @@ The current beta is available as an **SPK package for Synology DSM**. It is an i
 - **Container Manager 20.10.23-1437 or newer**, installed and running.
 - Internet access for initial installation and source/download operations.
 
-The developer has tested the application on **DS1817+ with DSM 7.3.1 Update 1**, including beta.20 and its updated About window. Other models have not yet been verified. This beta is intended for a trusted local network and one trusted administrator.
+The developer confirms that **beta.22 works on DS1817+ with DSM 7.3.1 Update 1** after a one-time cleanup of a stale beta.21 port registration. Other models and clean installation have not yet been verified. This beta is intended for a trusted local network and one trusted administrator.
 
 ### Installation and updates
 
@@ -84,7 +86,7 @@ Současná beta je dostupná jako **SPK balíček pro Synology DSM**. Jde o nez�
 - Nainstalovaný a spuštěný **Container Manager 20.10.23-1437 nebo novější**.
 - Připojení k internetu pro první instalaci, sledování zdrojů a stahování.
 
-Vývojář aplikaci vyzkoušel na **DS1817+ s DSM 7.3.1 Update 1**, včetně beta.20 a upraveného okna O aplikaci. Ostatní modely zatím nejsou ověřené. Beta je určená pro důvěryhodnou místní síť a jednoho důvěryhodného správce.
+Vývojář potvrzuje, že **beta.22 funguje na DS1817+ s DSM 7.3.1 Update 1** po jednorázovém odstranění staré rezervace portu z bety.21. Ostatní modely a čistá instalace zatím nejsou ověřené. Beta je určená pro důvěryhodnou místní síť a jednoho důvěryhodného správce.
 
 ### Instalace a aktualizace
 
@@ -103,3 +105,10 @@ MediaGrabber NAS je zdarma. Dobrovolný příspěvek neodemyká žádné funkce 
 · [Nahlásit problém](https://github.com/petrjones/MediaGrabber-NAS/issues)
 
 [Verze pro Windows](https://github.com/petrjones/MediaGrabber) je samostatná aplikace s dalšími funkcemi. Okno O aplikaci v NAS verzi ověřuje její aktuální stabilní vydání na GitHubu a při neúspěšné kontrole ponechá poslední ověřený údaj.
+
+
+## License / Licence
+
+The original NAS code is licensed under **GPL-3.0-or-later**; see [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) and [third-party notices](THIRD-PARTY-NOTICES.md). The corresponding NAS source/build archive is included in the SPK, downloadable from About, and attached to the [beta.22 release](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22). Third-party components retain their own licenses. The separate Windows edition keeps its existing licensing. See [PRIVACY.md](PRIVACY.md) for data handling and retention.
+
+Původní NAS kód je pod **GPL-3.0-or-later**; viz [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) a [licence použitých součástí](THIRD-PARTY-NOTICES.md). Odpovídající zdrojový archiv včetně sestavení je přibalený v SPK, dostupný z okna O aplikaci a přiložený k [vydání beta.22](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22). Použité součásti si ponechávají vlastní licence. Licence samostatné Windows verze se nemění. Zacházení s údaji a jejich uchování popisuje [PRIVACY.md](PRIVACY.md).

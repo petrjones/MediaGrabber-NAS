@@ -1,0 +1,13 @@
+.git
+.env
+secrets
+data
+downloads
+tests
+__pycache__
+**/__pycache__
+*.zip
+*.log
+*.sqlite3*
+*.png
+!mg_nas/static/logo.png

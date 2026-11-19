@@ -1,0 +1,3 @@
+#!/bin/sh
+# postinst generated the new configuration and made the stopped-state backup.
+exit 0

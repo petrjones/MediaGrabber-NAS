@@ -1,0 +1,38 @@
+services:
+  mediagrabber:
+    image: pjsoft/mediagrabber-nas:0.1.0-beta.8-local
+    build:
+      context: .
+    container_name: mediagrabber-nas
+    restart: unless-stopped
+    user: "${PUID:-1000}:${PGID:-1000}"
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${MG_PORT:-8787}:8787"
+    environment:
+      MG_ALLOWED_HOSTS: "${MG_ALLOWED_HOSTS:-}"
+      MG_SECURE_COOKIE: "${MG_SECURE_COOKIE:-0}"
+    volumes:
+      - ./data:/data
+      - ${DOWNLOAD_DIR:-./downloads}:/downloads
+    secrets:
+      - admin_password
+    read_only: true
+    tmpfs:
+      - /tmp:size=268435456,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 1g
+    # Do not request CPU CFS quotas: DS1817+ rejects Docker NanoCPUs.
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+secrets:
+  admin_password:
+    file: ./secrets/admin_password.txt

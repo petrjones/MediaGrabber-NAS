@@ -1,0 +1,11 @@
+#!/bin/sh
+# Validation only. The package manager has already stopped the old package.
+set -eu
+runtime="${SYNOPKG_PKGVAR:-/var/packages/MediaGrabberNAS/var}/runtime"
+if [ ! -f "$runtime/schema" ] || [ ! -s "$runtime/secrets/admin_password" ] || [ "$(cat "$runtime/schema")" != 1 ]; then
+    message="Existing SPK settings are missing. Upgrade stopped; existing data has not been changed. / Chybi nastaveni SPK. Aktualizace byla zastavena."
+    printf '%s\n' "$message" >&2
+    if [ -n "${SYNOPKG_TEMP_LOGFILE:-}" ]; then printf '%s\n' "$message" > "$SYNOPKG_TEMP_LOGFILE"; fi
+    exit 1
+fi
+exit 0

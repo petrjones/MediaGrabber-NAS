@@ -1,0 +1,3 @@
+#!/bin/sh
+# Media and permanent package state are deliberately retained, including upgrades.
+exit 0

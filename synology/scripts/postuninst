@@ -1,0 +1,34 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# DSM removes the payload BEFORE postuninst, including during an upgrade.
+# This hook must be self-contained; never source a file from SYNOPKG_PKGDEST.
+set -eu
+# Keep the early returns before any path resolution or private-data access.
+[ "${SYNOPKG_PKG_STATUS:-}" = UNINSTALL ] || exit 0
+[ "${wizard_remove_private_data:-no}" = yes ] || exit 0
+MG_VAR=${SYNOPKG_PKGVAR:-/var/packages/MediaGrabberNAS/var}
+MG_RUNTIME="$MG_VAR/runtime"
+MG_SHARE=${MG_SPK_SHARE_PATH:-/var/packages/MediaGrabberNAS/shares/MediaGrabber}
+mg_fail() {
+    printf '%s\n' "$1" >&2
+    if [ -n "${SYNOPKG_TEMP_LOGFILE:-}" ]; then
+        printf '%s\n' "$1" > "$SYNOPKG_TEMP_LOGFILE"
+    fi
+    exit 1
+}
+[ "${SYNOPKG_PKGNAME:-}" = MediaGrabberNAS ] || mg_fail "Unexpected package identity."
+[ -e "$MG_RUNTIME" ] || exit 0
+[ ! -L "$MG_RUNTIME" ] && [ -d "$MG_RUNTIME" ] || mg_fail "Refusing a redirected runtime directory."
+[ ! -L "$MG_RUNTIME/schema" ] || mg_fail "Refusing a redirected state marker."
+[ -f "$MG_RUNTIME/schema" ] && [ "$(cat "$MG_RUNTIME/schema")" = 1 ] || mg_fail "Unsupported state schema; existing data was preserved."
+var_real=$(CDPATH= cd -- "$MG_VAR" && pwd -P) || mg_fail "Cannot resolve private package directory."
+runtime_real=$(CDPATH= cd -- "$MG_RUNTIME" && pwd -P) || mg_fail "Cannot resolve private runtime directory."
+[ -n "$var_real" ] && [ "$var_real" != / ] && [ "$runtime_real" = "$var_real/runtime" ] || mg_fail "Unsafe private-state path."
+if [ -d "$MG_SHARE" ]; then
+    share_real=$(CDPATH= cd -- "$MG_SHARE" && pwd -P) || mg_fail "Cannot verify media location."
+    case "$share_real/" in "$runtime_real/"*) mg_fail "Private state overlaps media." ;; esac
+    case "$runtime_real/" in "$share_real/"*) mg_fail "Private state overlaps media." ;; esac
+fi
+# Only this canonical private child is erased after the explicit opt-in.
+rm -rf -- "$runtime_real" || mg_fail "Unable to remove private application state."
+printf '%s\n' "Private settings, history, credentials and backups removed. Media was retained."

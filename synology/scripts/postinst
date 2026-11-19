@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+. "${SYNOPKG_PKGDEST:?}/installer/package-lib.sh"
+mg_install

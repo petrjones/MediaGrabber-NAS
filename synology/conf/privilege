@@ -1,0 +1,5 @@
+{
+  "defaults": {"run-as": "package"},
+  "username": "mg-nas",
+  "groupname": "mg-nas"
+}

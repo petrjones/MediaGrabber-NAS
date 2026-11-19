@@ -1,0 +1,13 @@
+{
+  "MediaGrabber.cgi": {
+    "SYNO.SDS.App.MediaGrabberNAS.Instance": {
+      "type": "app",
+      "appWindow": "SYNO.SDS.App.MediaGrabberNAS.Instance",
+      "icon": "images/mediagrabber_{0}.png",
+      "title": "MediaGrabber NAS",
+      "desc": "PJSoft MediaGrabber NAS",
+      "allUsers": false,
+      "allowMultiInstance": false
+    }
+  }
+}

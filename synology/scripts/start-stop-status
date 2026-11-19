@@ -1,0 +1,29 @@
+#!/bin/sh
+set -eu
+. "${SYNOPKG_PKGDEST:?}/installer/package-lib.sh"
+case "${1:-}" in
+    prestart)
+        # data-share may only be acquired later in the enable/start sequence.
+        mg_validate_state
+        ;;
+    start)
+        # The native docker-project resource starts the container before this hook.
+        mg_prestart
+        attempts=0
+        while [ "$attempts" -lt 30 ]; do
+            if mg_running; then exit 0; fi
+            attempts=$((attempts + 1))
+            sleep 1
+        done
+        mg_fail "MediaGrabber did not become ready. Open the Container Manager project log. / Sluzba se nespustila. Podrobnosti jsou v protokolu projektu Container Manager."
+        ;;
+    stop|prestop)
+        # The native worker stops the container in WHEN_HALT, after this hook.
+        exit 0
+        ;;
+    status)
+        if mg_running; then exit 0; fi
+        exit 3
+        ;;
+    *) exit 1 ;;
+esac

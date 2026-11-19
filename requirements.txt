@@ -1,0 +1,4 @@
+gunicorn==27.0.1
+yt-dlp[default]==2026.10.26
+mutagen==1.48.1
+tzdata==2026.2; sys_platform == "win32"

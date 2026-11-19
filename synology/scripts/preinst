@@ -1,0 +1,41 @@
+#!/bin/sh
+# Validation only. DSM runs scripts as the package account, not root.
+set -eu
+
+fail() {
+    printf '%s\n' "$1" >&2
+    if [ -n "${SYNOPKG_TEMP_LOGFILE:-}" ]; then
+        printf '%s\n' "$1" > "$SYNOPKG_TEMP_LOGFILE"
+    fi
+    exit 1
+}
+
+case "${SYNOPKG_PKG_STATUS:-INSTALL}" in
+    UPGRADE) exit 0 ;;
+esac
+
+password=${wizard_admin_password:-}
+confirm=${wizard_admin_password_confirm:-}
+[ "$password" = "$confirm" ] || fail "The passwords do not match. / Hesla se neshoduji."
+# Count UTF-8 code points by removing continuation bytes (never print the secret).
+length=$(printf '%s' "$password" | LC_ALL=C tr -d '\200-\277' | wc -c | tr -d ' ')
+[ "$length" -ge 14 ] && [ "$length" -le 128 ] || fail "Use a password of 14-128 characters. / Zvol heslo o delce 14-128 znaku."
+case "$password" in
+    [[:space:]]*|*[[:space:]]) fail "Password must not start or end with whitespace. / Heslo nesmi zacinat ani koncit mezerou." ;;
+esac
+cr=$(printf '\r')
+case "$password" in
+    *"$cr"*|*'
+'*) fail "Password must be a single line. / Heslo musi byt na jednom radku." ;;
+esac
+# A documented best-effort check before a fresh install; Docker also rejects binds
+# to an occupied port. Do not mistake our existing service for a foreign conflict.
+state_dir=${SYNOPKG_PKGVAR:-/var/packages/MediaGrabberNAS/var}/runtime
+if [ ! -f "$state_dir/schema" ]; then
+    service_tool=$(command -v servicetool || :)
+    if [ -n "$service_tool" ]; then
+        port_info=$("$service_tool" --conf-port-conflict-check --tcp 8787 2>/dev/null) || port_info=''
+        case "$port_info" in *'IsConflict: true'*) fail 'Port 8787 is already registered by another service. / Port 8787 pouziva jina sluzba.' ;; esac
+    fi
+fi
+exit 0

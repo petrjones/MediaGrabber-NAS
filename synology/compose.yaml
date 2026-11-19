@@ -1,0 +1,80 @@
+# Available to DSM's Docker Project worker before postinst runs.
+services:
+  mediagrabber:
+    image: pjsoft/mediagrabber-nas:spk-__SPK_VERSION__
+    build:
+      context: .
+    container_name: mediagrabber-nas-spk
+    restart: unless-stopped
+    # The tiny bootstrap reads the mounted directory owner and drops all IDs.
+    # It then execs tini and Gunicorn as that non-root owner, never as root.
+    user: "0:0"
+    entrypoint: ["python", "-m", "mg_nas.container_entrypoint"]
+    # A non-null Compose entrypoint clears the image CMD: pass it explicitly.
+    # Keep one scalar: Container Manager's generated admin YAML rejected the
+    # numeric-looking list arguments (command.5) despite valid source YAML.
+    command: >-
+      gunicorn 'mg_nas.app:create_app()' --bind 0.0.0.0:8787
+      --workers 1 --worker-class gthread --threads 8 --timeout 1200
+      --graceful-timeout 25 --worker-tmp-dir /tmp
+      --access-logfile - --error-logfile -
+    ports:
+      - "8787:8787"
+    environment:
+      MG_DSM_KEY_FILE: /run/secrets/dsm_bridge_key
+      MG_PACKAGE_BUILD: "__SPK_VERSION__"
+      MG_RUNTIME_SETTINGS_FILE: /run/secrets/runtime.env
+    volumes:
+      - type: volume
+        source: state
+        target: /data
+        volume:
+          nocopy: true
+      - type: volume
+        source: secrets
+        target: /run/secrets
+        read_only: true
+        volume:
+          nocopy: true
+      - type: volume
+        source: media
+        target: /downloads
+        volume:
+          nocopy: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=268435456,mode=1777
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 128
+    mem_limit: 1g
+    # Do not request CPU CFS quotas: DS1817+ rejects Docker NanoCPUs.
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+volumes:
+  state:
+    name: mediagrabber-nas-spk-state
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/packages/MediaGrabberNAS/var/runtime/data
+  secrets:
+    name: mediagrabber-nas-spk-secrets
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/packages/MediaGrabberNAS/var/runtime/secrets
+  media:
+    name: mediagrabber-nas-spk-media
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/packages/MediaGrabberNAS/shares/MediaGrabber

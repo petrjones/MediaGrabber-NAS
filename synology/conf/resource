@@ -1,0 +1,17 @@
+{
+  "web-config": {
+    "nginx-static-config": {
+      "enable": [{"type": "dsm", "relpath": "nginx/portal.conf"}]
+    }
+  },
+  "data-share": {
+    "shares": [{"name": "MediaGrabber", "permission": {"rw": ["mg-nas"]}}]
+  },
+  "docker-project": {
+    "projects": [{
+      "name": "mediagrabber-nas-spk",
+      "path": "docker",
+      "build_params": {"force_pull": false, "force_recreate": true, "build": true}
+    }]
+  }
+}

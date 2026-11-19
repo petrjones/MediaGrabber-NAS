@@ -53,8 +53,10 @@ The [Windows edition](https://github.com/petrjones/MediaGrabber) is a separate a
 
 ## Screenshots / Snímky aplikace
 
-<img width="2042" height="1211" alt="MediaGrabber NAS_4" src="https://github.com/user-attachments/assets/5d14b246-8bd6-4c29-9845-d98552a71dc0" />
-
+<img width="1996" height="1215" alt="MediaGrabber NAS" src="https://github.com/user-attachments/assets/19a5bfa2-c32d-4ef6-a3cd-1ebfc6f3733b" />
+<img width="1946" height="1097" alt="MediaGrabber NAS_2" src="https://github.com/user-attachments/assets/eb8cb117-3dcc-410e-b93a-60d50557728e" />
+<img width="2017" height="1222" alt="MediaGrabber NAS_3" src="https://github.com/user-attachments/assets/129ab366-7914-4df4-ad0c-20e4b2aa5a85" />
+<img width="2042" height="1211" alt="MediaGrabber NAS_4" src="https://github.com/user-attachments/assets/916d47c5-ee01-4065-ae55-69ab81c3f6a8" />
 
 ---
 

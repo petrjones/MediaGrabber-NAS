@@ -8,32 +8,50 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, pinned
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0, Node24, pinned
+        with:
+          persist-credentials: false
       - name: Check source tests and prepare context
+        env:
+          MG_TEST_SHELL: /bin/bash
         run: |
           python -m pip install -r requirements-dev.txt
           python -m unittest discover -s tests -v
-          python tools/prepare_build.py --build 23 --output release-build/context
+          python tools/prepare_build.py --build 24 --output release-build/context
       - name: Build Linux image and collect its corresponding sources
         run: |
           set -euo pipefail
-          version=0.1.0-0023
+          version=0.1.0-0024
           image=pjsoft/mediagrabber-nas:spk-$version
           mkdir -p release-build
           docker build --pull --platform linux/amd64 --build-arg MG_VERSION=$version -t "$image" release-build/context
           docker save "$image" | gzip -n > release-build/image.tar.gz
           python tools/collect_runtime_sources.py --image "$image" --archive release-build/image.tar.gz --version "$version" --output release-build/MediaGrabber-NAS-$version-runtime-sources.tar.gz
-          python tools/build_spk.py --build 23 --offline-image release-build/image.tar.gz --runtime-sources release-build/MediaGrabber-NAS-$version-runtime-sources.tar.gz --output release-build
-          cp release-build/context/SOURCE.tar.gz release-build/MediaGrabber-NAS-0.1.0-beta.23-source.tar.gz
-          rm release-build/image.tar.gz
-      - name: Save review artifacts without publishing a release
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, pinned
+          python tools/build_spk.py --build 24 --offline-image release-build/image.tar.gz --runtime-sources release-build/MediaGrabber-NAS-$version-runtime-sources.tar.gz --output release-build
+          cp release-build/context/SOURCE.tar.gz release-build/MediaGrabber-NAS-0.1.0-beta.24-source.tar.gz
+          cd release-build
+          sha256sum MediaGrabber-NAS-0.1.0-beta.24-source.tar.gz > MediaGrabber-NAS-0.1.0-beta.24-source.tar.gz.sha256
+          sha256sum MediaGrabber-NAS-$version-runtime-sources.tar.gz > MediaGrabber-NAS-$version-runtime-sources.tar.gz.sha256
+          rm image.tar.gz
+      - name: Save installer separately without publishing a release
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0, Node24, pinned
         with:
-          name: MediaGrabber-NAS-0023-review
+          name: MediaGrabber-NAS-0024-installer
           path: |
             release-build/*.spk
-            release-build/*.sha256
-            release-build/*sources.tar.gz
+            release-build/*.spk.sha256
             release-build/*source.tar.gz
+            release-build/*source.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+      - name: Save matching runtime sources separately
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0, Node24, pinned
+        with:
+          name: MediaGrabber-NAS-0024-runtime-sources
+          path: |
+            release-build/*runtime-sources.tar.gz
+            release-build/*runtime-sources.tar.gz.sha256
+          if-no-files-found: error
           retention-days: 1
           compression-level: 0

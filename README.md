@@ -1,6 +1,6 @@
 # MediaGrabber NAS
 
-**Current beta / Aktuální beta: [0.1.0-beta.22](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22).**
+**Current beta / Aktuální beta: [0.1.0-beta.24](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta24).**
 
 **Video and audio downloads, a persistent queue, and automatic YouTube monitoring for Synology NAS.**
 
@@ -30,23 +30,25 @@ The current beta is available as an **SPK package for Synology DSM**. It is an i
 - Synology NAS with an **x86-64 processor**.
 - **DSM 7.2.2-72806 or newer**.
 - **Container Manager 20.10.23-1437 or newer**, installed and running.
-- Internet access for initial installation and source/download operations.
+- Internet access to download the installer, check online sources and download media. The beta.24 SPK includes the prebuilt application image and runtime dependencies.
 
-The developer confirms that **beta.22 works on DS1817+ with DSM 7.3.1 Update 1** after a one-time cleanup of a stale beta.21 port registration. Other models and clean installation have not yet been verified. This beta is intended for a trusted local network and one trusted administrator.
+The developer confirms successful **beta.24 installation, application startup and a short-video download on DS1817+ with DSM 7.3.1 Update 1**. Other models, clean installation and installation without internet access have not yet been verified. This beta is intended for a trusted local network and one trusted administrator.
 
 ### Installation and updates
 
-1. Open [Releases](https://github.com/petrjones/MediaGrabber-NAS/releases) and download the `.spk` file from the newest applicable release's **Assets**. A `.spk.sha256` file is provided for integrity verification.
+1. Open the [beta.24 release](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta24) and download **`MediaGrabber-NAS-0.1.0-0024.spk`** from **Assets**. Its `.spk.sha256` file is provided for integrity verification. Source archives are separate downloads and are not required to install the application.
 2. In DSM, choose **Package Center → Manual Install** and select the SPK intact.
 3. During first installation, choose an application password. The installer prepares the service account and the `MediaGrabber` shared folder automatically.
-4. **The first installation requires internet and may take several minutes** while the NAS downloads dependencies and builds the container.
+4. **Beta.24 loads the prebuilt application image included in the SPK through Container Manager.** It does not build the image or download runtime dependencies during installation. Loading the image and starting the application may take several minutes.
 5. Open MediaGrabber NAS from DSM. Direct access at `http://NAS_LAN_IP:8787` uses login name `admin` and the application password chosen during installation.
 
 **To update:** install a newer SPK as an update, without uninstalling the previous package. Settings, queue, history and media are retained. Close and reopen the application window after upgrading.
 
+The destination-folder picker currently shows Synology service directories such as `@eaDir`. Choose `/downloads` or a normal user subfolder. Hiding service directories is planned for a later update. Beta.24 fixes the beta.23 preload-image packaging error.
+
 ### Availability and support
 
-MediaGrabber NAS is free of charge. Optional contributions do not unlock features or change functionality. Download availability depends on the source and yt-dlp. Use the application for content you own or have permission to download.
+MediaGrabber NAS is free of charge. Optional contributions do not unlock features or change functionality. Download availability depends on the source and yt-dlp. Use the application only for content you are permitted to download, in accordance with applicable platform terms.
 
 · [Report an issue](https://github.com/petrjones/MediaGrabber-NAS/issues)
 
@@ -84,23 +86,25 @@ Současná beta je dostupná jako **SPK balíček pro Synology DSM**. Jde o nez�
 - Synology s procesorem **x86-64**.
 - **DSM 7.2.2-72806 nebo novější**.
 - Nainstalovaný a spuštěný **Container Manager 20.10.23-1437 nebo novější**.
-- Připojení k internetu pro první instalaci, sledování zdrojů a stahování.
+- Připojení k internetu pro stažení instalátoru, sledování online zdrojů a stahování médií. SPK bety.24 obsahuje předem sestavený obraz aplikace i potřebné součásti.
 
-Vývojář potvrzuje, že **beta.22 funguje na DS1817+ s DSM 7.3.1 Update 1** po jednorázovém odstranění staré rezervace portu z bety.21. Ostatní modely a čistá instalace zatím nejsou ověřené. Beta je určená pro důvěryhodnou místní síť a jednoho důvěryhodného správce.
+Vývojář potvrzuje úspěšnou **instalaci bety.24, spuštění aplikace a stažení krátkého videa na DS1817+ s DSM 7.3.1 Update 1**. Ostatní modely, čistá instalace a instalace bez připojení k internetu zatím nejsou ověřené. Beta je určená pro důvěryhodnou místní síť a jednoho důvěryhodného správce.
 
 ### Instalace a aktualizace
 
-1. Otevři [vydání aplikace](https://github.com/petrjones/MediaGrabber-NAS/releases) a v části **Assets** nejnovějšího vhodného vydání stáhni soubor `.spk`. Soubor `.spk.sha256` slouží ke kontrole jeho integrity.
+1. Otevři [vydání beta.24](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta24) a v části **Assets** stáhni **`MediaGrabber-NAS-0.1.0-0024.spk`**. Odpovídající soubor `.spk.sha256` slouží ke kontrole integrity. Zdrojové archivy jsou samostatně a k instalaci aplikace je nepotřebuješ.
 2. V DSM zvol **Centrum balíčků → Ruční instalace** a vyber celý SPK bez rozbalování.
 3. Při první instalaci si nastav heslo aplikace. Průvodce automaticky připraví účet služby a sdílenou složku `MediaGrabber`.
-4. **První instalace potřebuje internet a může trvat několik minut**, než NAS stáhne potřebné součásti a sestaví kontejner.
+4. **Beta.24 prostřednictvím Container Manageru načte předem sestavený obraz aplikace přibalený v SPK.** Při instalaci se obraz nesestavuje ani se nestahují jeho potřebné součásti. Načtení obrazu a spuštění aplikace může trvat několik minut.
 5. Aplikaci otevři z prostředí DSM. Přímý přístup přes `http://IP_ADRESA_NASU:8787` používá jméno `admin` a heslo zvolené při instalaci.
 
 **Aktualizace:** novější SPK nainstaluj jako aktualizaci bez odinstalování předchozího balíčku. Nastavení, fronta, historie a média zůstanou zachované. Po aktualizaci zavři a znovu otevři okno aplikace.
 
+Výběr cílové složky zatím zobrazuje i servisní složky Synology, například `@eaDir`. Vyber `/downloads` nebo běžnou vlastní podsložku. Skrytí servisních složek je plánované do další aktualizace. Beta.24 opravuje chybné zabalení obrazu aplikace v betě.23.
+
 ### Dostupnost a podpora
 
-MediaGrabber NAS je zdarma. Dobrovolný příspěvek neodemyká žádné funkce ani nemění funkčnost. Dostupnost stahování závisí na zdroji a nástroji yt-dlp. Stahuj obsah, který vlastníš nebo k jehož stažení máš svolení.
+MediaGrabber NAS je zdarma. Dobrovolný příspěvek neodemyká žádné funkce ani nemění funkčnost. Dostupnost stahování závisí na zdroji a nástroji yt-dlp. Stahuj jen obsah, k jehož stažení máš oprávnění, a dodržuj podmínky příslušné platformy.
 
 · [Nahlásit problém](https://github.com/petrjones/MediaGrabber-NAS/issues)
 
@@ -109,6 +113,6 @@ MediaGrabber NAS je zdarma. Dobrovolný příspěvek neodemyká žádné funkce 
 
 ## License / Licence
 
-The original NAS code is licensed under **GPL-3.0-or-later**; see [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) and [third-party notices](THIRD-PARTY-NOTICES.md). The corresponding NAS source/build archive is included in the SPK, downloadable from About, and attached to the [beta.22 release](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22). Third-party components retain their own licenses. The separate Windows edition keeps its existing licensing. See [PRIVACY.md](PRIVACY.md) for data handling and retention.
+The original NAS code is licensed under **GPL-3.0-or-later**; see [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) and [third-party notices](THIRD-PARTY-NOTICES.md). The corresponding NAS application source/build archive is included in the SPK, downloadable from About, and attached to the [beta.24 release](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta24). The same release also includes a separate matching runtime-source archive for the components in its application image; neither source archive is required for installation. Third-party components retain their own licenses. The separate Windows edition keeps its existing licensing. See [PRIVACY.md](PRIVACY.md) for data handling and retention.
 
-Původní NAS kód je pod **GPL-3.0-or-later**; viz [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) a [licence použitých součástí](THIRD-PARTY-NOTICES.md). Odpovídající zdrojový archiv včetně sestavení je přibalený v SPK, dostupný z okna O aplikaci a přiložený k [vydání beta.22](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta22). Použité součásti si ponechávají vlastní licence. Licence samostatné Windows verze se nemění. Zacházení s údaji a jejich uchování popisuje [PRIVACY.md](PRIVACY.md).
+Původní NAS kód je pod **GPL-3.0-or-later**; viz [LICENSE](LICENSE), [COPYRIGHT](COPYRIGHT) a [licence použitých součástí](THIRD-PARTY-NOTICES.md). Odpovídající zdrojový archiv NAS aplikace včetně sestavení je přibalený v SPK, dostupný z okna O aplikaci a přiložený k [vydání beta.24](https://github.com/petrjones/MediaGrabber-NAS/releases/tag/v0.1.0-beta24). Totéž vydání obsahuje samostatný odpovídající archiv zdrojů součástí obrazu aplikace; k instalaci nepotřebuješ ani jeden ze zdrojových archivů. Použité součásti si ponechávají vlastní licence. Licence samostatné Windows verze se nemění. Zacházení s údaji a jejich uchování popisuje [PRIVACY.md](PRIVACY.md).

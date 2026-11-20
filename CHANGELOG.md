@@ -1,3 +1,10 @@
+## Build0024 / 0.1.0-beta.24 — 2026-11-19
+
+- Correct the beta.23 preload bundle path: include image.tar.gz inside package.tgz so DSM installs it under the application target directory. The beta.23 image was valid but incorrectly placed in the outer SPK archive.
+- Add a regression that resolves the configured preload path against the installed payload and verifies a regular file with the exact saved image bytes.
+- Split CI output into installer/application-source and runtime-source downloads. Pin Node24-based checkout and upload actions; enable POSIX lifecycle tests on the Linux runner. Keep the existing manual trigger and read-only repository access.
+- Beta.24 requires a new Linux CI build and a physical DSM upgrade test. Delivered beta.23 remains unchanged and must not be reused as a working installer.
+
 ## Build0022 / 0.1.0-beta.22 — 2026-11-19
 
 - Fix the confirmed DSM port registration collision: Container Manager owns the published TCP8787 port; do not additionally register it through native port-config. The beta.21 pilot image built successfully but DSM rejected its container profile with error1202.

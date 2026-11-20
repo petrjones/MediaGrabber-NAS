@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ID = "MediaGrabberNAS"
 FEATURE_VERSION = "0.1.0"
-DEFAULT_BUILD = 22
+DEFAULT_BUILD = 24
 EPOCH = 1794614400  # deterministic artifact timestamps, 2026-11-14 UTC
 
 
@@ -141,6 +141,9 @@ def build_spk(output_dir: Path, build=DEFAULT_BUILD, offline_image=None, runtime
         # Use the saved image only. Container Manager must not pull or build online.
         compose = files["docker/compose.yaml"].decode().replace("    build:\n      context: .\n", "    pull_policy: never\n")
         files["docker/compose.yaml"] = compose.encode()
+        # DSM resolves preload-image relative to the installed target. Only
+        # package.tgz is extracted there; the outer SPK is installer metadata.
+        files["image.tar.gz"] = offline_image.read_bytes()
         files["OFFLINE-IMAGE.json"] = json.dumps({"image_config_sha256":image_id,
             "image_archive_sha256":hashlib.sha256(offline_image.read_bytes()).hexdigest(),
             "runtime_sources":runtime_sources.name,"runtime_sources_sha256":hashlib.sha256(runtime_sources.read_bytes()).hexdigest()}).encode()
@@ -173,8 +176,6 @@ def build_spk(output_dir: Path, build=DEFAULT_BUILD, offline_image=None, runtime
     with tarfile.open(fileobj=spk_stream,mode="w",format=tarfile.USTAR_FORMAT) as tar:
         add(tar,"INFO",content)
         add(tar,"package.tgz",package)
-        if offline_image:
-            add(tar, "image.tar.gz", offline_image.read_bytes())
         for name,size in [("PACKAGE_ICON.PNG",64),("PACKAGE_ICON_256.PNG",256)]:
             add(tar,name,(ROOT/f"synology/ui/images/mediagrabber_{size}.png").read_bytes())
         for path in sorted((ROOT/"synology/conf").iterdir()):

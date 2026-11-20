@@ -26,6 +26,22 @@ def fixture_image(folder, version, architecture='amd64'):
 
 
 class ReleasePackagingTests(unittest.TestCase):
+    def test_preload_image_resolves_to_a_regular_file_in_installed_target(self):
+        # DSM expands package.tgz into /var/packages/MediaGrabberNAS/target.
+        # Files in the outer SPK are not installed there (the beta.23 defect).
+        with tempfile.TemporaryDirectory() as directory:
+            folder=Path(directory)
+            image,sources=fixture_image(folder,'0.1.0-0024')
+            artifact=builder.build_spk(folder,24,image,sources)
+            with tarfile.open(artifact) as outer:
+                resource=json.load(outer.extractfile('conf/resource'))
+                relative=resource['docker-project']['preload-image']
+                self.assertNotIn(relative,outer.getnames())
+            with payload(artifact) as inner:
+                self.assertIn(relative,inner.getnames(), 'DSM target lacks its configured preload bundle')
+                self.assertTrue(inner.getmember(relative).isfile())
+                self.assertEqual(inner.extractfile(relative).read(),image.read_bytes())
+
     def test_packaged_sources_and_licenses_never_include_runtime_secrets(self):
         with tempfile.TemporaryDirectory() as directory:
             artifact=builder.build_spk(Path(directory),21)
@@ -48,8 +64,8 @@ class ReleasePackagingTests(unittest.TestCase):
                 resource=json.load(outer.extractfile('conf/resource'))
                 self.assertEqual(resource['docker-project']['preload-image'],'image.tar.gz')
                 self.assertFalse(resource['docker-project']['projects'][0]['build_params']['build'])
-                self.assertEqual(outer.extractfile('image.tar.gz').read(),image.read_bytes())
             with payload(artifact) as inner:
+                self.assertEqual(inner.extractfile('image.tar.gz').read(),image.read_bytes())
                 compose=inner.extractfile('docker/compose.yaml').read()
                 self.assertNotIn(b'    build:',compose)
                 self.assertIn(b'pull_policy: never',compose)
